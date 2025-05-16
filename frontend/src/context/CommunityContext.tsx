@@ -1,14 +1,12 @@
-
 import { Community, Subject } from "@/types";
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { communities as mockCommunities } from "@/data/mockData";
 
 interface CommunityContextType {
   communities: Community[];
   getCommunityById: (id: string) => Community | undefined;
   getSubjectById: (id: string) => Subject | undefined;
   getSubjectsByCommunitiesIds: (communityIds: string[]) => Subject[];
-  getAllSubjects: () => Subject[]; // Add the missing method signature
+  getAllSubjects: () => Subject[];
 }
 
 const CommunityContext = createContext<CommunityContextType | undefined>(undefined);
@@ -17,8 +15,18 @@ export const CommunityProvider = ({ children }: { children: ReactNode }) => {
   const [communities, setCommunities] = useState<Community[]>([]);
 
   useEffect(() => {
-    // In a real app, we'd fetch from an API
-    setCommunities(mockCommunities);
+    const fetchCommunities = async () => {
+      try {
+        const response = await fetch("/api/communities"); // <-- Adjust URL as needed
+        if (!response.ok) throw new Error("Failed to fetch communities");
+        const data: Community[] = await response.json();
+        setCommunities(data);
+      } catch (error) {
+        console.error("Error fetching communities:", error);
+      }
+    };
+
+    fetchCommunities();
   }, []);
 
   const getCommunityById = (id: string) => {
@@ -42,14 +50,9 @@ export const CommunityProvider = ({ children }: { children: ReactNode }) => {
     }
     return subjects;
   };
-  
-  // Implement the missing getAllSubjects method
+
   const getAllSubjects = () => {
-    const allSubjects: Subject[] = [];
-    for (const community of communities) {
-      allSubjects.push(...community.subjects);
-    }
-    return allSubjects;
+    return communities.flatMap(community => community.subjects);
   };
 
   return (
