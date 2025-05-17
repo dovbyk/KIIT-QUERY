@@ -1,9 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const communitySchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true }, // e.g., "CSE"
-  description: String,
-}, { timestamps: true });
+const CommunitySchema = new Schema({
+  name : {type : String, required: true},
+  description: {type: String},
+  subjects: [{type: Schema.Types.ObjectId, ref: 'Subject'}]
+});
 
-module.exports = mongoose.model("Community", communitySchema);
-
+module.exports = mongoose.model('Community', CommunitySchema);

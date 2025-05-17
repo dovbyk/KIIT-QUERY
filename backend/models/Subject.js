@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const subjectSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // e.g., "DSA"
-  community: { type: mongoose.Schema.Types.ObjectId, ref: "Community", required: true },
-}, { timestamps: true });
+const SubjectSchema = new Schema({
+  name: { type: String, required: true },
+  communityId: { type: Schema.Types.ObjectId, ref: 'Community', required: true }
+});
 
-module.exports = mongoose.model("Subject", subjectSchema);
-
+module.exports = mongoose.model('Subject', SubjectSchema);
