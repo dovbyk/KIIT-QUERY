@@ -17,7 +17,7 @@ export const CommunityProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchCommunities = async () => {
       try {
-        const response = await fetch("/api/communities"); // <-- Adjust URL as needed
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/communities/getcommunities`);
         if (!response.ok) throw new Error("Failed to fetch communities");
         const data: Community[] = await response.json();
         setCommunities(data);
